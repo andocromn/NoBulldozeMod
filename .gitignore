@@ -1,0 +1,6 @@
+﻿*.dll
+*.dll.mdb
+Test/.vs
+.vs
+bin
+obj
