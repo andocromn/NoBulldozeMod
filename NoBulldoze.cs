@@ -38,25 +38,33 @@ namespace NoBulldoze
 		}
 	}
     public class Monitor : ThreadingExtensionBase {
-        private BuildingManager _buildingManager;
-        FastList<ushort> abandonedBuildings;
+		
+        private readonly BuildingManager _buildingManager;
+        private readonly SimulationManager _simulationManager;
 
+        public DestroyMonitor()
+        {
+            this._buildingManager = Singleton<BuildingManager>.instance;
+            this._simulationManager = Singleton<SimulationManager>.instance;
+		}
+		
         public override void OnAfterSimulationTick() {
-            if (threadingManager.simulationTick % 1024 == 0 && !threadingManager.simulationPaused) {
-				for (ushort buildingId = 1; buildingId < BuildingManager.instance.m_buildings.m_buffer.Length; buildingId++)
-				{
-					var building = BuildingManager.instance.m_buildings.m_buffer[buildingId];
-					if (!building.m_flags.IsFlagSet(Building.Flags.Created)) continue;
+            for (var i = (ushort)(_simulationManager.m_currentTickIndex % 1000); i < _buildingManager.m_buildings.m_buffer.Length; i+=1000)
+            {
+                if (_buildingManager.m_buildings.m_buffer[i].m_flags == Building.Flags.None)
+                    continue;
 
-					if (building != ?"?Abandoned?"?) continue;
+                if ((_buildingManager.m_buildings.m_buffer[i].m_flags & Building.Flags.Abandoned) != Building.Flags.None)
+                {
+	                var building = BuildingManager.instance.m_buildings.m_buffer[i];
+					if (!building.m_flags.IsFlagSet(Building.Flags.Created)) continue;
 
 					var buildingAi = building.Info.m_buildingAI;
 					if (buildingAi == null) continue;
-
-					buildingAi.SetHistorical(buildingId, ref BuildingManager.instance.m_buildings.m_buffer[buildingId], historical);
-				}
+					
+					buildingAi.SetHistorical(i, ref BuildingManager.instance.m_buildings.m_buffer[i], true);
+                }
             }
-			base.OnAfterSimulationTick();
         }
     }
 }
