@@ -37,7 +37,7 @@ namespace NoBulldoze
 			//
 		}
 	}
-    public class Monitor : ThreadingExtensionBase {
+    public class DestroyMonitor : ThreadingExtensionBase {
 		
         private readonly BuildingManager _buildingManager;
         private readonly SimulationManager _simulationManager;
