@@ -27,7 +27,10 @@ namespace NoBulldoze
 
     public class BulldozeBehave : MonoBehaviour {
 
-		void Start() => DebugOutputPanel.AddMessage(PluginManager.MessageType.Message, "IT Works!!!  Now what?");
+		void Start() 
+        {
+            DebugOutputPanel.AddMessage(PluginManager.MessageType.Message, "IT Works!!!  Now what?");
+        } 
 		void Update(){ }
 	}
 
@@ -67,7 +70,7 @@ namespace NoBulldoze
             }
             catch(exception ex)
             {
-                DebugOutputPanel.AddMessage(PluginManager.MessageType.Message, $"ex: {ex.Message} Stack Trace: {ex.StackTrace}");
+                DebugOutputPanel.AddMessage(PluginManager.MessageType.Message, "ex: {0} Stack Trace: {1}",ex.Message,ex.StackTrace);
             }
         }
     }
